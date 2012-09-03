@@ -128,7 +128,13 @@ bool ChatHandler::HandleAnnounceCommand(char* args)
     if (!*args)
         return false;
 
-    sWorld.SendWorldText(LANG_SYSTEMMESSAGE, args);
+    std::string str = "";
+    str += m_session->GetPlayer()->GetName();
+    str += " : ";
+    str += args;
+
+    sWorld.SendServerMessage(SERVER_MSG_CUSTOM, str.c_str(), m_session->GetPlayer());
+    //sWorld.SendWorldText(LANG_SYSTEMMESSAGE, args);
     return true;
 }
 
@@ -138,7 +144,10 @@ bool ChatHandler::HandleNotifyCommand(char* args)
     if (!*args)
         return false;
 
-    std::string str = GetMangosString(LANG_GLOBAL_NOTIFY);
+    //std::string str = GetMangosString(LANG_GLOBAL_NOTIFY);
+    std::string str = "";
+    str += m_session->GetPlayer()->GetName();
+    str += " : ";
     str += args;
 
     WorldPacket data(SMSG_NOTIFICATION, (str.size() + 1));
