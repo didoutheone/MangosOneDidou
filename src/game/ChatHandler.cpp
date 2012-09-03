@@ -170,6 +170,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
             if (msg.empty())
                 break;
 
+	    sLog.outDebug("CHAT: %s SAY %s", GetPlayer()->GetName(), msg.c_str());
+
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
 
@@ -198,6 +200,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
 
             if (msg.empty())
                 break;
+
+	    sLog.outDebug("CHAT: %s WHISPER to %s : %s", GetPlayer()->GetName(), to.c_str(), msg.c_str());
 
             if (!normalizePlayerName(to))
             {
@@ -234,6 +238,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
             if (msg.empty())
                 break;
 
+	    sLog.outDebug("CHAT: %s SAY to group %s", GetPlayer()->GetName(), msg.c_str());
+
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
 
@@ -266,6 +272,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
             if (msg.empty())
                 break;
 
+	    sLog.outDebug("CHAT: %s SAY to guild %s", GetPlayer()->GetName(), msg.c_str());
+
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
 
@@ -289,6 +297,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
             if (msg.empty())
                 break;
 
+	    sLog.outDebug("CHAT: %s SAY/officer to guild %s", GetPlayer()->GetName(), msg.c_str());
+
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
 
@@ -311,6 +321,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
 
             if (msg.empty())
                 break;
+
+	    sLog.outDebug("CHAT: %s SAY to raid %s", GetPlayer()->GetName(), msg.c_str());
 
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
@@ -341,6 +353,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
 
             if (msg.empty())
                 break;
+
+	    sLog.outDebug("CHAT: %s SAY/leader to raid %s", GetPlayer()->GetName(), msg.c_str());
 
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
@@ -376,6 +390,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
             if (msg.empty())
                 break;
 
+	    sLog.outDebug("CHAT: %s SAY/warning to raid %s", GetPlayer()->GetName(), msg.c_str());
+
             Group* group = GetPlayer()->GetGroup();
             if (!group || !group->isRaidGroup() ||
                     !(group->IsLeader(GetPlayer()->GetObjectGuid()) || group->IsAssistant(GetPlayer()->GetObjectGuid())))
@@ -398,6 +414,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
             if (msg.empty())
                 break;
 
+	    sLog.outDebug("CHAT: %s SAY to battleground %s", GetPlayer()->GetName(), msg.c_str());
+
             // battleground raid is always in Player->GetGroup(), never in GetOriginalGroup()
             Group* group = GetPlayer()->GetGroup();
             if (!group || !group->isBGGroup())
@@ -418,6 +436,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
 
             if (msg.empty())
                 break;
+
+	    sLog.outDebug("CHAT: %s SAY/leader to battleground %s", GetPlayer()->GetName(), msg.c_str());
 
             // battleground raid is always in Player->GetGroup(), never in GetOriginalGroup()
             Group* group = GetPlayer()->GetGroup();
@@ -440,6 +460,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
 
             if (msg.empty())
                 break;
+
+	    sLog.outDebug("CHAT: %s SAY to channel %s : %s", GetPlayer()->GetName(), channel.c_str(), msg.c_str());
 
             if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))
                 if (Channel* chn = cMgr->GetChannel(channel, _player))
