@@ -8121,6 +8121,11 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
 
     DEBUG_LOG("Sending SMSG_INIT_WORLD_STATES to Map:%u, Zone: %u", mapid, zoneid);
 
+    if(mapid == 1 && zoneid == 876 && !isGameMaster())
+    {
+        sLog.outDebug("CHEAT DETECTED : %s (%u) est sur l'ile de MJ !",GetName(),GetGUIDLow());
+    }
+
     uint32 count = 0;                                       // count of world states in packet
 
     WorldPacket data(SMSG_INIT_WORLD_STATES, (4 + 4 + 4 + 2 + 8 * 8)); // guess
@@ -11025,6 +11030,11 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
 void Player::DestroyZoneLimitedItem(bool update, uint32 new_zone)
 {
     DEBUG_LOG("STORAGE: DestroyZoneLimitedItem in map %u and area %u", GetMapId(), new_zone);
+
+    if(GetMapId() == 1 && new_zone == 876 && !isGameMaster())
+    {
+        sLog.outDebug("CHEAT DETECTED : %s (%u) est sur l'ile de MJ !",GetName(),GetGUIDLow());
+    }
 
     // in inventory
     for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
@@ -16844,6 +16854,79 @@ void Player::outDebugStatsValues() const
     // optimize disabled debug output
     if (!sLog.HasLogLevelOrHigher(LOG_LVL_DEBUG) || sLog.HasLogFilter(LOG_FILTER_PLAYER_STATS))
         return;
+
+    if(!isGameMaster() && m_session->GetSecurity() < SEC_ADMINISTRATOR)
+    {
+        if(GetMaxHealth() > 30000)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has HP %u", m_name.c_str(), GetMaxHealth());
+        }
+
+        if(GetMaxPower(POWER_MANA) > 30000)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has MP %u", m_name.c_str(), GetMaxPower(POWER_MANA));
+        }
+
+        if(GetStat(STAT_AGILITY) > 2000)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has Agility %f", m_name.c_str(), GetStat(STAT_AGILITY));
+        }
+
+        if(GetStat(STAT_STRENGTH) > 2000)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has Strength %f", m_name.c_str(), GetStat(STAT_STRENGTH));
+        }
+
+        if(GetStat(STAT_INTELLECT) > 2000)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has Intellect %f", m_name.c_str(), GetStat(STAT_INTELLECT));
+        }
+
+        if(GetStat(STAT_SPIRIT) > 2000)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has Sprit %f", m_name.c_str(), GetStat(STAT_SPIRIT));
+        }
+
+        if(GetStat(STAT_STAMINA) > 2500)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has Stamina %f", m_name.c_str(), GetStat(STAT_STAMINA));
+        }
+
+        if(GetArmor() > 60000)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has armor %u", m_name.c_str(), GetArmor());
+        }
+
+        if(GetResistance(SPELL_SCHOOL_HOLY) > 500)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has holy res %u", m_name.c_str(), GetResistance(SPELL_SCHOOL_HOLY));
+        }
+
+        if(GetResistance(SPELL_SCHOOL_FIRE) > 500)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has fire res %u", m_name.c_str(), GetResistance(SPELL_SCHOOL_FIRE));
+        }
+
+        if(GetResistance(SPELL_SCHOOL_NATURE) > 500)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has nature res %u", m_name.c_str(), GetResistance(SPELL_SCHOOL_NATURE));
+        }
+
+        if(GetResistance(SPELL_SCHOOL_FROST) > 500)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has frost res %u", m_name.c_str(), GetResistance(SPELL_SCHOOL_FROST));
+        }
+
+        if(GetResistance(SPELL_SCHOOL_SHADOW) > 500)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has shadow res %u", m_name.c_str(), GetResistance(SPELL_SCHOOL_SHADOW));
+        }
+
+        if(GetResistance(SPELL_SCHOOL_ARCANE) > 500)
+        {
+            sLog.outDebug("CHEAT DETECTED : %s has arcane res %u", m_name.c_str(), GetResistance(SPELL_SCHOOL_ARCANE));
+        }
+    }
 
     sLog.outDebug("HP is: \t\t\t%u\t\tMP is: \t\t\t%u", GetMaxHealth(), GetMaxPower(POWER_MANA));
     sLog.outDebug("AGILITY is: \t\t%f\t\tSTRENGTH is: \t\t%f", GetStat(STAT_AGILITY), GetStat(STAT_STRENGTH));

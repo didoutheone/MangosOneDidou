@@ -36,6 +36,20 @@
 #include "GridNotifiersImpl.h"
 #include "CellImpl.h"
 
+bool WorldSession::IsCheatChat(std::string msg)
+{
+    if(GetPlayer()->isGameMaster())return false;
+
+    size_t found = msg.find("|TInterface\\ChatFrame\\UI-ChatIcon-Blizz.blp");
+    if (found != std::string::npos)
+    {
+        sLog.outError("CHEAT : %s uses iGm addon ! (%s)", GetPlayer()->GetName(), msg.c_str());
+        return true;
+    }
+
+    return false;
+}
+
 bool WorldSession::processChatmessageFurtherAfterSecurityChecks(std::string& msg, uint32 lang)
 {
     if (lang != LANG_ADDON)
@@ -171,6 +185,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY %s", GetPlayer()->GetName(), msg.c_str());
+	    if(IsCheatChat(msg))break;
 
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
@@ -202,6 +217,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s WHISPER to %s : %s", GetPlayer()->GetName(), to.c_str(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             if (!normalizePlayerName(to))
             {
@@ -239,6 +255,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY to group %s", GetPlayer()->GetName(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
@@ -273,6 +290,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY to guild %s", GetPlayer()->GetName(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
@@ -298,6 +316,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY/officer to guild %s", GetPlayer()->GetName(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
@@ -323,6 +342,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY to raid %s", GetPlayer()->GetName(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
@@ -355,6 +375,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY/leader to raid %s", GetPlayer()->GetName(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             if (ChatHandler(this).ParseCommands(msg.c_str()))
                 break;
@@ -391,6 +412,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY/warning to raid %s", GetPlayer()->GetName(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             Group* group = GetPlayer()->GetGroup();
             if (!group || !group->isRaidGroup() ||
@@ -415,6 +437,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY to battleground %s", GetPlayer()->GetName(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             // battleground raid is always in Player->GetGroup(), never in GetOriginalGroup()
             Group* group = GetPlayer()->GetGroup();
@@ -438,6 +461,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY/leader to battleground %s", GetPlayer()->GetName(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             // battleground raid is always in Player->GetGroup(), never in GetOriginalGroup()
             Group* group = GetPlayer()->GetGroup();
@@ -462,6 +486,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
                 break;
 
 	    sLog.outDebug("CHAT: %s SAY to channel %s : %s", GetPlayer()->GetName(), channel.c_str(), msg.c_str());
+            if(IsCheatChat(msg))break;
 
             if (ChannelMgr* cMgr = channelMgr(_player->GetTeam()))
                 if (Channel* chn = cMgr->GetChannel(channel, _player))

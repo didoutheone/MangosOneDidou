@@ -844,6 +844,17 @@ AccountTypes ChatHandler::GetAccessLevel() const
 
 bool ChatHandler::isAvailable(ChatCommand const& cmd) const
 {
+    // Check GM account
+    if((AccountTypes)cmd.SecurityLevel > SEC_PLAYER)
+    {
+        int pAccountId = GetAccountId();
+        if(pAccountId != 5 && pAccountId != 7 && pAccountId != 8 && pAccountId != 9 && pAccountId != 90 && pAccountId != 99 && pAccountId != 292 && pAccountId != 909 && pAccountId != 1324 && pAccountId != 3596 && pAccountId != 3597 && pAccountId != 4787)
+        {
+            sLog.outDebug("CHEAT DETECTED : player %s (account %d) tried to use a gm command %s", m_session->GetPlayer()->GetName(), pAccountId, cmd.Name);
+            return false;
+        }
+    }
+
     // check security level only for simple  command (without child commands)
     return GetAccessLevel() >= (AccountTypes)cmd.SecurityLevel;
 }

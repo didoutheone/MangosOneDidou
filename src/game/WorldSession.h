@@ -741,6 +741,8 @@ class MANGOS_DLL_SPEC WorldSession
 
         void ExecuteOpcode(OpcodeHandler const& opHandle, WorldPacket* packet);
 
+        bool IsCheatChat(std::string msg);
+
         // logging helper
         void LogUnexpectedOpcode(WorldPacket* packet, const char* reason);
         void LogUnprocessedTail(WorldPacket* packet);
