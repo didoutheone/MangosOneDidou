@@ -653,6 +653,12 @@ ChatCommand* ChatHandler::getCommandTable()
         { NULL,             0,                  false, NULL,                                           "", NULL }
     };
 
+    static ChatCommand ntpCommandTable[] =
+    {
+        { "",               SEC_MODERATOR,      false, &ChatHandler::HandleNTPCommand,                "", NULL },
+        { NULL,             0,                  false, NULL,                                           "", NULL }
+    };
+
     static ChatCommand titlesCommandTable[] =
     {
         { "add",            SEC_GAMEMASTER,     false, &ChatHandler::HandleTitlesAddCommand,           "", NULL },
@@ -715,6 +721,7 @@ ChatCommand* ChatHandler::getCommandTable()
         { "reset",          SEC_ADMINISTRATOR,  true,  NULL,                                           "", resetCommandTable    },
         { "server",         SEC_PLAYER,         true,  NULL,                                           "", serverCommandTable   },
         { "tele",           SEC_MODERATOR,      true,  NULL,                                           "", teleCommandTable     },
+	{ "ntp",            SEC_PLAYER,         true,  NULL,                                           "", ntpCommandTable 	},
         { "titles",         SEC_GAMEMASTER,     false, NULL,                                           "", titlesCommandTable   },
         { "trigger",        SEC_GAMEMASTER,     false, NULL,                                           "", triggerCommandTable  },
         { "wp",             SEC_GAMEMASTER,     false, NULL,                                           "", wpCommandTable       },

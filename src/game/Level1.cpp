@@ -1551,6 +1551,93 @@ bool ChatHandler::HandleTeleCommand(char* args)
     return HandleGoHelper(_player, tele->mapId, tele->position_x, tele->position_y, &tele->position_z, &tele->orientation);
 }
 
+bool ChatHandler::HandleNTPCommand(char * args)
+{
+    if(!*args)
+        return false;
+
+    Player* _player = m_session->GetPlayer();
+
+    if(_player->IsTaxiFlying())
+    {
+        SendSysMessage(LANG_YOU_IN_FLIGHT);
+        SetSentErrorMessage(true);
+        return true;
+    }
+
+    if(_player->isInCombat())
+    {
+        SendSysMessage(LANG_YOU_IN_COMBAT);
+        SetSentErrorMessage(true);
+        return true;
+    }
+
+    char* cId = ExtractKeyFromLink(&args,"Htele");    // string or [name] Shift-click form |color|Htele:name|h[name]|h|r
+    if(!cId)
+        return false;
+
+    std::string name = cId;
+    WorldDatabase.escape_string(name);
+
+    QueryResult *result = WorldDatabase.PQuery("SELECT position_x,position_y,position_z,orientation,map,raceMask,minLevel FROM game_tele_ntp WHERE name = '%s'",name.c_str());
+    if (!result)
+    {
+        SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
+        return true;
+    }
+    Field *fields = result->Fetch();
+    float x = fields[0].GetFloat();
+    float y = fields[1].GetFloat();
+    float z = fields[2].GetFloat();
+    float ort = fields[3].GetFloat();
+    int mapid = fields[4].GetUInt16();
+    int faction = fields[5].GetUInt16();
+    int minLevel = fields[6].GetUInt16();
+    delete result;
+
+    if(!MapManager::IsValidMapCoord(mapid,x,y))
+    {
+        PSendSysMessage(LANG_INVALID_TARGET_COORD,x,y,mapid);
+        return true;
+    }
+
+    if(_player->getLevel() < minLevel)
+    {
+        SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
+        SetSentErrorMessage(true);
+        return true;
+    }
+
+    _player->SaveRecallPosition();
+
+    // Test faction
+    bool isOk = false;
+    if(_player->isGameMaster())
+    {
+        isOk = true;
+    }
+    else
+    {
+        if(faction & _player->getRaceMask())
+        {
+            isOk = true;
+        }
+    }
+
+    if(isOk)
+    {
+        _player->TeleportTo(mapid, x, y, z, ort);
+    }
+    else
+    {
+        PSendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
+        SetSentErrorMessage(true);
+        return true;
+    }
+    return true;
+}
+
+
 bool ChatHandler::HandleLookupAreaCommand(char* args)
 {
     if (!*args)

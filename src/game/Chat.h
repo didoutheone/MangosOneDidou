@@ -485,6 +485,8 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleTeleGroupCommand(char* args);
         bool HandleTeleNameCommand(char* args);
 
+	bool HandleNTPCommand(char * args);
+
         bool HandleTitlesAddCommand(char* args);
         bool HandleTitlesCurrentCommand(char* args);
         bool HandleTitlesRemoveCommand(char* args);
