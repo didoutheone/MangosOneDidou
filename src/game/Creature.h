@@ -470,6 +470,7 @@ class MANGOS_DLL_SPEC Creature : public Unit
 
         bool HasStaticDBSpawnData() const;                  // listed in `creature` table and have fixed in DB guid
 
+	char const* GetName() const { return GetCreatureInfo()->Name; }
         char const* GetSubName() const { return GetCreatureInfo()->SubName; }
 
         void Update(uint32 update_diff, uint32 time) override;  // overwrite Unit::Update

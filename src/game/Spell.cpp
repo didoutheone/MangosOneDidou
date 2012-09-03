@@ -4030,13 +4030,25 @@ void Spell::HandleThreatSpells()
         // positive spells distribute threat among all units that are in combat with target, like healing
         if (positive)
         {
-            target->getHostileRefManager().threatAssist(m_caster /*real_caster ??*/, threat, m_spellInfo);
+	    // Threat/2 for assist = heal
+            if(target->GetTypeId()==TYPEID_PLAYER)
+            {
+                sLog.outDebug("Threat added by positive spell on victims of player %s : %f", ((Player*)target)->GetName(), threat * 0.5f);
+            }
+
+            target->getHostileRefManager().threatAssist(m_caster /*real_caster ??*/, threat * 0.5f, m_spellInfo);
         }
         // for negative spells threat gets distributed among affected targets
         else
         {
             if (!target->CanHaveThreatList())
                 continue;
+
+	    if(m_caster->GetTypeId()==TYPEID_PLAYER && target->GetTypeId()==TYPEID_UNIT)
+            {
+                sLog.outDebug("Threat added by negative spell on victim %s for player %s : %f", ((Creature*)target)->GetName(), ((Player*)m_caster)->GetName(), threat);
+            }
+
 
             target->AddThreat(m_caster, threat, false, GetSpellSchoolMask(m_spellInfo), m_spellInfo);
         }
