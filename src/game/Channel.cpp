@@ -114,7 +114,7 @@ void Channel::Join(ObjectGuid p, const char* pass)
     JoinNotify(p);
 
     // if no owner first logged will become
-    if (!IsConstant() && !m_ownerGuid)
+    if(!IsConstant() && !m_ownerGuid && plr->GetSession()->GetSecurity() < SEC_GAMEMASTER)
     {
         SetOwner(p, (m_players.size() > 1 ? true : false));
         m_players[p].SetModerator(true);
@@ -160,8 +160,23 @@ void Channel::Leave(ObjectGuid p, bool send)
 
         if (changeowner)
         {
-            ObjectGuid newowner = !m_players.empty() ? m_players.begin()->second.player : ObjectGuid();
-            SetOwner(newowner);
+	    int ownerSet = 0;
+            for(PlayerList::const_iterator i = m_players.begin(); i != m_players.end(); ++i)
+            {
+                Player *pno = sObjectMgr.GetPlayer(i->first);
+
+                if(pno->GetSession()->GetSecurity() < SEC_GAMEMASTER)
+                {
+                    SetOwner(i->first);
+                    ownerSet = 1;
+                    break;
+                }
+            }
+
+            if(ownerSet == 0)
+            {
+                SetOwner(ObjectGuid());
+            }
         }
     }
 }
