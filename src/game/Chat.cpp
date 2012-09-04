@@ -980,6 +980,11 @@ void ChatHandler::PSendSysMessage(int32 entry, ...)
     va_list ap;
     char str [2048];
     va_start(ap, entry);
+    if(format == NULL)
+    {
+        sLog.outError("entry %d does not exists in mangos string", entry);
+        format = "Mangos string %d unknown.";
+    }
     vsnprintf(str, 2048, format, ap);
     va_end(ap);
     SendSysMessage(str);
