@@ -165,7 +165,7 @@ void Channel::Leave(ObjectGuid p, bool send)
             {
                 Player *pno = sObjectMgr.GetPlayer(i->first);
 
-                if(pno->GetSession()->GetSecurity() < SEC_GAMEMASTER)
+                if(pno && pno->GetSession() != NULL && pno->GetSession()->GetSecurity() < SEC_GAMEMASTER)
                 {
                     SetOwner(i->first);
                     ownerSet = 1;
