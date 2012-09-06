@@ -1488,6 +1488,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 case 804:                                   // Explode Bug
                 case 23138:                                 // Gate of Shazzrah
                 case 28560:                                 // Summon Blizzard
+                case 30835:                                 // Infernal Relay
                 case 31347:                                 // Doom TODO: exclude top threat target from target selection
                 case 33711:                                 // Murmur's Touch
                 case 38794:                                 // Murmur's Touch (h)
@@ -1498,6 +1499,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 case 28542:                                 // Life Drain
                     unMaxTargets = 2;
                     break;
+                case 30004:                                 // Flame Wreath
                 case 31298:                                 // Sleep
                 case 39992:                                 // Needle Spine Targeting (BT, Warlord Najentus)
                     unMaxTargets = 3;
