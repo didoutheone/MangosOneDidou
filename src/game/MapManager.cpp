@@ -274,6 +274,9 @@ bool MapManager::ExistMapAndVMap(uint32 mapid, float x, float y)
 
 bool MapManager::IsValidMAP(uint32 mapid)
 {
+    // Hack for emerald dream
+    if(mapid == 169) return true;
+
     MapEntry const* mEntry = sMapStore.LookupEntry(mapid);
     return mEntry && (!mEntry->IsDungeon() || ObjectMgr::GetInstanceTemplate(mapid));
     // TODO: add check for battleground template
