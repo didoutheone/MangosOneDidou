@@ -317,7 +317,7 @@ void BattleGroundEY::RemovePlayer(Player* plr, ObjectGuid guid)
     for (uint8 j = BG_EY_NODES_MAX; j >= 0; --j)
     {
         for (size_t i = 0; i < m_PlayersNearPoint[j].size(); ++i)
-            if (m_PlayersNearPoint[j][i] == guid)
+            if (m_PlayersNearPoint[j][i] != NULL && m_PlayersNearPoint[j][i] == guid)
                 m_PlayersNearPoint[j].erase(m_PlayersNearPoint[j].begin() + i);
     }
     if (IsFlagPickedup())
